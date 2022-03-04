@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timeZone.dart' as tz;
 
-import '../timetable_set.dart';
-
 class NotifyHelper{
 
   FlutterLocalNotificationsPlugin

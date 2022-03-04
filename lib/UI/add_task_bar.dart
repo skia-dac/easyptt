@@ -10,6 +10,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import 'widgets/input_field.dart';
+import 'widgets/savebutton.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -55,7 +56,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
          crossAxisAlignment: CrossAxisAlignment.start,
        children: [
          Text(" Add Task",style: headingStyle,),
-         MyInputField(title: "Subject", hint: "Enter The Subject" ,controller: _titleController ),
+         MyInputField(title: "Title", hint: "Enter The Title" ,controller: _titleController ),
          MyInputField(title: "Note", hint: "Enter your Note",controller: _noteController),
          MyInputField(title: "Date", hint: DateFormat.yMEd().format(_selectedDate),
          widget: IconButton(
@@ -150,7 +151,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
      crossAxisAlignment: CrossAxisAlignment.center,
      children: [
        _colorpallete(),
-       MyButton(label: "Create Task", onTap: ()=>_validateDate())
+       MyButton(label: "Create Task",  onTap: ()=>_validateDate()),
 
   ],
 )
@@ -190,7 +191,7 @@ _validateDate(){
           isCompleted: 0,
         )
     );
-   print ("My id is" "+" "$value");
+   print("My id is "+"$value");
    }
   _colorpallete(){
     return   Column(
@@ -245,16 +246,16 @@ _validateDate(){
             color: Get.isDarkMode? Colors.white:Colors.black
         ),
       ),
-      actions: const [
-        CircleAvatar(
-          backgroundImage:  AssetImage(
-              "images/ii.jpg"
-          ),
-        ),/*
-           Icon(Icons.person, size: 20, ), */
-        SizedBox(width: 10,),
-
-      ],
+      // actions: const [
+      //   // CircleAvatar(
+      //   //   backgroundImage:  AssetImage(
+      //   //       "assets/images/ii.jpg"
+      //   //   ),
+      //   // ),/*
+      //   //    Icon(Icons.person, size: 20, ), */
+      //   SizedBox(width: 10,),
+      //
+      // ],
     );
   }
 
@@ -274,16 +275,23 @@ _validateDate(){
       print ("it's null or something is wrong");
     }
   }
-  _getTimeFromUser({required bool isStartTime}){
-   var pickedTime= _showTimePicker();
+  _getTimeFromUser({required bool isStartTime}) async{
+   var pickedTime= await _showTimePicker();
    String _formatedTime = pickedTime.format ( context);
  if(pickedTime== null){
-   print ('Time canceld');
+   print('Time canceld');
  } else if (isStartTime==true){
-   _startTime=_formatedTime;
+   setState(() {
+     _startTime=_formatedTime;
+
+   });
+
 
  }else if (isStartTime==false){
-   _endTime=_formatedTime;
+   setState(() {
+     _endTime=_formatedTime;
+   });
+
  }
   }
   _showTimePicker(){
@@ -292,8 +300,9 @@ _validateDate(){
         context:context ,
         initialTime:
         TimeOfDay(
-            hour: 9,
-            minute: 10)
+            hour: int.parse(_startTime.split(":")[0]) ,
+            minute: int.parse(_startTime.split(":")[1].split(" ") [0]),
+    )
     );
   }
 }
